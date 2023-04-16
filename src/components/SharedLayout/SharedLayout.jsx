@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Container } from './Container.styled';
 import Header from './Header';
 import { Suspense } from 'react';
