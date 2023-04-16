@@ -17,8 +17,6 @@ const SharedLayout = () => {
               radius="9"
               color="#805ad5"
               ariaLabel="three-dots-loading"
-              wrapperStyle={{}}
-              wrapperClassName=""
               visible={true}
             />
           </div>
