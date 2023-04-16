@@ -1,9 +1,9 @@
 .container {
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  // flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
   color: #010101;
   padding: 30px;
 }
@@ -11,4 +11,11 @@
 .title {
   font-size: 36px;
   margin-bottom: 15px;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
