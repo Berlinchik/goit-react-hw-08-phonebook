@@ -1,41 +1,53 @@
-import ContactForm from './ContactForm/ContactForm';
-import ContactList from './ContactList/ContactList';
-import Filter from './Filter/Filter';
-import s from './APP.module.scss';
-import { getContacts } from '../redux/operations';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { ThreeDots } from 'react-loader-spinner';
-import { selectLoading } from '../redux/selectors';
+import { lazy } from 'react';
+import { useSelector } from 'react-redux';
+import { selectLoggedIn } from '../redux/auth/auth-selectors';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import SharedLayout from './SharedLayout/SharedLayout';
+
+const Home = lazy(() => import('../pages/Home'));
+const Contacts = lazy(() => import('../pages/Contacts'));
+const Register = lazy(() => import('../pages/Register'));
+const Login = lazy(() => import('../pages/Login'));
+
+const PrivateRoute = ({ component, redirectTo = '/login' }) => {
+  const isAuth = useSelector(selectLoggedIn);
+  return isAuth ? component : <Navigate to={redirectTo} />;
+};
+const PublicRoute = ({ component, redirectTo = '/' }) => {
+  const isAuth = useSelector(selectLoggedIn);
+  return !isAuth ? component : <Navigate to={redirectTo} />;
+};
 
 export const App = () => {
-  const dispatch = useDispatch();
-  const isLoading = useSelector(selectLoading);
-
-  useEffect(() => {
-    dispatch(getContacts());
-  }, [dispatch]);
-
   return (
-    <div className={s.container}>
-      <h1 className={s.title}>Phonebook</h1>
-      <ContactForm />
-      {isLoading ? (
-        <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
-          color="#4fa94d"
-          ariaLabel="three-dots-loading"
-          wrapperStyle={{}}
-          wrapperClassName=""
-          visible={true}
-        />
-      ) : (
-        <h2 className={s.title}>Contacts</h2>
-      )}
-      <Filter />
-      <ContactList />
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 24,
+        color: '#010101',
+      }}
+    >
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<Home />} />
+          <Route
+            path="/contacts"
+            element={<PrivateRoute component={<Contacts />} />}
+          />
+          <Route
+            path="/register"
+            element={<PublicRoute component={<Register />} />}
+          />
+          <Route
+            path="/login"
+            element={<PublicRoute component={<Login />} />}
+          />
+          <Route path="*" element={<Navigate to="/contacts" />} />
+        </Route>
+      </Routes>
     </div>
   );
 };
